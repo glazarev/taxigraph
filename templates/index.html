@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+      
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v4.1.1">
+    <title>Taxigraph</title>
+
+
+    <!-- Bootstrap core CSS -->
+<link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="jumbotron.css" rel="stylesheet">
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+ 
+  <a class="navbar-brand" href="#"><img src="flask-framework/static/logo_tafigraph.png" width="30" height="30" class="d-inline-block align-top" alt="">Taxigraph</a>
+        
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com/explorer">Explore tax data</a>
+      </li>
+        <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Side-by-side comparisons</a>
+        <div class="dropdown-menu" aria-labelledby="dropdown01">
+          <a class="dropdown-item" href="https://taxigraph.herokuapp.com/exploresics">Explore data by SIC codes</a>
+          <a class="dropdown-item" href="https://taxigraph.herokuapp.com/exploresize">Explore data by company size</a>
+        </div>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com/reconciliation">Tax rate reconciliation</a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com/trends">Tax trends</a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com/factsheet">Company tax fact sheet</a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com/glossary">Glossary of terms</a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com/tickers">Tickers</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="https://taxigraph.herokuapp.com/about" tabindex="-1" aria-disabled="true">About</a>
+      </li>
+
+    </ul>
+    
+  </div>
+</nav>
+
+<main role="main">
+
+  <!-- Main jumbotron for a primary marketing message or call to action -->
+  <div class="jumbotron">
+    <div class="container">
+      <h1 class="display-3">Welcome to Taxigraph!</h1>
+      <p>Taxigraph is a tool that allows you to explore and analyze tax-related data gathered from the filed financial statements of all publically traded companies that are listed on U.S. stock exchanges.</p>
+      <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Example row of columns -->
+    <div class="row">
+      <div class="col-md-4">
+        <h2>Visualize the data</h2>
+        <p>With this extremely versatile and interactive tool you can graph and explore the relationship between any two (and up to four!) variables across different companies. Focus on particular industry codes or aggregate across desired fiscal years. Enter any company ticker to see how a given company compares with its peers.</p>
+        <p><a class="btn btn-secondary" href="https://taxigraph.herokuapp.com/explorer" role="button">Explore &raquo;</a></p>
+      </div>
+      <div class="col-md-4">
+        <h2>Reconciling differences</h2>
+        <p>Firms often use various strategies and deductions to reduce their tax burden and thus end up paying different effective tax rates than the official statutory rate. Public companies must reconcile these two tax rates by disclosing the reasons for the discrepancy. This tool ranks the most significant rate reconciliation reasons. </p>
+        <p><a class="btn btn-secondary" href="https://taxigraph.herokuapp.com/reconciliation" role="button">Discover &raquo;</a></p>
+      </div>
+      <div class="col-md-4">
+        <h2>By the numbers</h2>
+        <p>Enter any company ticker and any fiscal year and this tool will provide a fact sheet with the most relevant tax-related and other financial data we have available.</p>
+        <p><a class="btn btn-secondary" href="https://taxigraph.herokuapp.com/factsheet" role="button">Look up &raquo;</a></p>
+        <h2>Trending data</h2>
+        <p>Interested in how tax-relevant data trends over time for a given company? With this tool you can graph and analyze these trends.</p>
+        <p><a class="btn btn-secondary" href="https://taxigraph.herokuapp.com/trends" role="button">Graph &raquo;</a></p>
+      </div>      
+      </div>
+
+    <hr>
+
+  </div> <!-- /container -->
+
+</main>
+
+<footer class="container">
+  <p>&copy; Company 2017-2020</p>
+</footer>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    </body>
+</html>

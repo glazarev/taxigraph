@@ -1,0 +1,285 @@
+
+##### TRENDING
+
+@app.route('/trending')
+def trending():
+
+    # Load necessary files:
+    t=dill.load(open('static/t.pkl','rb'))
+    tag2label=dill.load(open('static/tag2label.pkl','rb'))
+    tickers=pd.read_table('static/tickers.txt')
+    tickers=tickers.set_index('cik')
+
+
+    # Get request to read in form entries
+    yearlist = request.args.getlist('year')
+    h1=request.args.get('h1','DomesticIncomeTaxExpenseBenefit')
+    h2=request.args.get('h2',None)
+    if h2=='None':
+        h2=None
+    tic=request.args.get('ticker',None)
+    #Obtain cik for selected ticker:
+    if tic=='':
+        ticik=None
+    else:
+        try:
+            ticik=tickers[tickers['ticker']==tic].index.values[0]
+        except:
+            ticik=None
+
+    # Define vars for json external file method
+    tag2label=dill.load(open('static/tag2label.pkl','rb'))
+    h1n=tag2label[h1]
+    if h2!=None:
+        h2n=tag2label[h2]
+        hvar=h1n+' Per '+h2n
+    else:
+        hvar=h1n            
+    hy='Fiscal Years'
+
+    
+    
+    # Build yearlist query string
+    joiner='&yearlist='
+    yearquery=joiner[1:]+joiner.join(yearlist)
+    
+    query=f'trending.json?histnum={h1}&histbase={h2}&{yearquery}&ticker={tic}' 
+
+    data=pd.read_json(query)
+    trend=data.plot.bar(x=hy,y=hvar)
+    
+
+
+    if yearlist:
+        return render_template('trending.html',h1list=h1list,h2list=h2list,chart=trend.to_json())
+    else:
+        return render_template('trending.html',h1list=h1list,h2list=h2list)
+
+    
+@app.route('/trending.json')
+def trending_json():
+        
+    # Load necessary files:
+    t=dill.load(open('static/t.pkl','rb'))
+    tag2label=dill.load(open('static/tag2label.pkl','rb'))
+    tickers=pd.read_table('static/tickers.txt')
+    tickers=tickers.set_index('cik')
+
+    histnum=request.args.get('h1','DomesticIncomeTaxExpenseBenefit')
+    histbase=request.args.get('h2',None)
+    if histbase=='None':
+        histbase=None
+        
+    #Obtain cik for selected ticker:
+    tic=request.args.get('ticker',None)
+    if tic=='':
+        ticik=None
+    else:
+        try:
+            ticik=tickers[tickers['ticker']==tic].index.values[0]
+        except:
+            ticik=None    
+            
+    years = request.args.getlist('yearlist')
+    years=[int(y) for y in years]         
+
+    setselect=(t.index.get_level_values('year').isin(years) & (t.index.get_level_values('cik')==ticik))
+
+    # Create dataset to be inserted in Altair
+    if histbase!=None:
+        data_hist=t.loc[setselect,[('value',histnum),('value',histbase),('month',histnum),('month',histbase)]].copy()
+        data_hist[('','hist_match')]=(t[('month',histnum)]==t[('month',histbase)])
+        data_hist=data_hist.drop([('month',histnum),('month',histbase)],axis=1)    
+    if histbase==None:
+        data_hist=t.loc[setselect,list(set([('value',histnum),('month',histnum)]))].copy()
+        data_hist[('','hist_match')]=t[('month',histnum)].notnull()
+        data_hist=data_hist.drop([('month',histnum)],axis=1)
+
+    # Drop 0 level and add company name:
+    data_hist=data_hist.droplevel(axis=1,level=0)
+    data_hist=data_hist.merge(dill.load(open('static/sic_codes.pkl','rb')),how='left',left_index=True,right_index=True)
+    data_hist=data_hist.droplevel(axis=0,level=0)
+    
+    # Define variables to be charted:
+    h1=tag2label[histnum]
+    if histbase!=None:
+        h2=tag2label[histbase]
+    hy='Fiscal Years'
+    if histbase!=None:
+        hvar=h1+' Per '+h2
+    else:
+        hvar=h1
+    data_hist.loc[data_hist['hist_match'],h1]=data_hist[histnum]
+    if histbase!=None:
+        data_hist.loc[data_hist['hist_match'],h2]=data_hist[histbase]
+    data_hist['yearc']=data_hist.index.get_level_values('year').astype('str')
+    data_hist.loc[data_hist['hist_match'],hy]=data_hist['yearc']
+
+    # Sort years:
+    data_hist=data_hist.sort_values('year',ascending=True)
+
+    #Define trendline variable:
+    if histbase!=None:
+        data_hist[hvar]=data_hist[h1]/data_hist[h2]
+    else:
+        data_hist[hvar]=data_hist[h1]
+    data_hist.loc[data_hist['hist_match']==0,hvar]=None
+
+    #Add string formatted labels:
+    hvarlabel='Trendline value'
+    if histbase!=None:
+        data_hist[hvarlabel]=data_hist[hvar].map(lambda x: "{:,.2f}".format(x))
+    elif data_hist[hvar].mean()>1:
+        data_hist[hvarlabel]=data_hist[hvar].map(lambda x: "${:,.0f}".format(x))
+    else:
+        data_hist[hvarlabel]=data_hist[hvar].map(lambda x:100*x).map(lambda x: "{:,.2f}%".format(x))
+
+    trend=data_hist.plot.bar(x=hy,y=hvar)
+        
+    return data_hist.save('trend.html')
+
+    
+
+
+
+
+
+##### TRENDS - OLD ALTAR
+
+    # Get request to read in form entries
+    yearlist = request.args.getlist('year')
+    h1=request.args.get('h1','DomesticIncomeTaxExpenseBenefit')
+    h2=request.args.get('h2',None)
+    tic=request.args.get('ticker','amzn')
+    
+    # Define vars for json external file method
+#    tag2label=dill.load(open('static/tag2label.pkl','rb'))
+#    h1n=tag2label[h1]
+#    if h2!=None:
+#        h2n=tag2label[h2]
+#        hvar=h1n+' Per '+h2n
+#    else:
+#        hvar=h1n
+    hvar='DomesticIncomeTaxExpenseBenefit'
+    hy='Fiscal Years'
+        
+    # Build yearlist query string
+#    joiner='&yearlist='
+#    yearquery=joiner[1:]+joiner.join(yearlist)
+    
+#    chart=f'trends.json?h1={h1}&h2={h2}&{yearquery}&ticker={tic}' 
+    
+        # ALTAIR Chart
+    query=f'trends.json?h1={h1}&h2={h2}&ticker={tic}' 
+    trend = alt.Chart(query ,width=600, height=200).mark_line().encode(
+        y=alt.Y(f'{hvar}:Q',scale=alt.Scale(type='linear')),
+        x = alt.X(hy)
+    )
+    points = alt.Chart(query,width=600, height=200).mark_point(filled=True,size=100).encode(
+        y = alt.Y(f'{hvar}:Q',scale=alt.Scale(type='linear')),
+        x = alt.X(hy),tooltip=[hvar,hy]
+    )
+    plot=trend+points
+    return render_template('trends.html',chart=plot.to_json(),h1list=h1list,h2list=h2list)
+
+@app.route('/trends.json')
+def trends_json():
+    
+    # Load needed files
+    t=dill.load(open('static/t.pkl','rb'))
+    tag2label=dill.load(open('static/tag2label.pkl','rb'))
+    tickers=pd.read_table('static/tickers.txt')
+    tickers=tickers.set_index('cik')
+
+    # Sample values:
+    years=[2018,2019]
+    histnum='DomesticIncomeTaxExpenseBenefit'
+    histbase=None    
+    tic='amzn'
+    
+    # Year selection - checklists:
+#    years = request.args.getlist('yearlist')
+#    years=[int(y) for y in years]         
+
+    # Variable selection
+#    histnum=request.args.get('h1','DomesticIncomeTaxExpenseBenefit')
+#    histbase=request.args.get('h2',None)
+#    if histbase=='None':
+#        histbase=None
+#    tic=request.args.get('ticker',None) #User input
+
+    #Obtain cik for selected ticker:
+    if tic=='':
+        ticik=None
+    else:
+        try:
+            ticik=tickers[tickers['ticker']==tic].index.values[0]
+        except:
+            ticik=None
+
+    setselect=(t.index.get_level_values('year').isin(years) & (t.index.get_level_values('cik')==ticik))
+
+    # Create dataset to be inserted in Altair
+    if histbase!=None:
+        data_hist=t.loc[setselect,[('value',histnum),('value',histbase),('month',histnum),('month',histbase)]].copy()
+        data_hist[('','hist_match')]=(t[('month',histnum)]==t[('month',histbase)])
+        data_hist=data_hist.drop([('month',histnum),('month',histbase)],axis=1)    
+    if histbase==None:
+        data_hist=t.loc[setselect,list(set([('value',histnum),('month',histnum)]))].copy()
+        data_hist[('','hist_match')]=t[('month',histnum)].notnull()
+        data_hist=data_hist.drop([('month',histnum)],axis=1)
+
+    # Drop 0 level and add company name:
+    data_hist=data_hist.droplevel(axis=1,level=0)
+    data_hist=data_hist.merge(dill.load(open('sic_codes.pkl','rb')),how='left',left_index=True,right_index=True)
+    data_hist=data_hist.droplevel(axis=0,level=0)
+    
+    # Define variables to be charted:
+    h1=tag2label[histnum]
+    if histbase!=None:
+        h2=tag2label[histbase]
+    hy='Fiscal Years'
+    if histbase!=None:
+        hvar=h1+' Per '+h2
+    else:
+        hvar=h1
+    data_hist.loc[data_hist['hist_match'],h1]=data_hist[histnum]
+    if histbase!=None:
+        data_hist.loc[data_hist['hist_match'],h2]=data_hist[histbase]
+    data_hist['yearc']=data_hist.index.get_level_values('year').astype('str')
+    data_hist.loc[data_hist['hist_match'],hy]=data_hist['yearc']
+
+    # Sort years:
+    data_hist=data_hist.sort_values('year',ascending=True)
+
+    #Define trendline variable:
+    if histbase!=None:
+        data_hist[hvar]=data_hist[h1]/data_hist[h2]
+    else:
+        data_hist[hvar]=data_hist[h1]
+    data_hist.loc[data_hist['hist_match']==0,hvar]=None
+
+    #Add string formatted labels:
+    hvarlabel='Trendline value'
+    if histbase!=None:
+        data_hist[hvarlabel]=data_hist[hvar].map(lambda x: "{:,.2f}".format(x))
+    elif data_hist[hvar].mean()>1:
+        data_hist[hvarlabel]=data_hist[hvar].map(lambda x: "${:,.0f}".format(x))
+    else:
+        data_hist[hvarlabel]=data_hist[hvar].map(lambda x:100*x).map(lambda x: "{:,.2f}%".format(x))
+
+    return data_hist.to_json(orient='records')
+    # ALTAIR Chart
+    
+#    trend = alt.Chart(data_hist, title=data_hist['name'].values[0],width=600, height=200).mark_line().encode(
+#        alt.Y(f'{hvar}:Q',scale=alt.Scale(type='linear')),
+#        x = hy
+#    )
+#    points = alt.Chart(data_hist,width=600, height=200).mark_point(filled=True,size=100).encode(
+#        alt.Y(f'{hvar}',scale=alt.Scale(type='linear')),
+#        x = hy,tooltip=[hvarlabel,hy]
+#    )
+#    plot=trend+points
+#    
+#    return plot.to_json()
+

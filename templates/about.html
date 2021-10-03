@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v4.1.1">
+    <title>Taxigraph</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Bootstrap core CSS -->
+<link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="starter-template.css" rel="stylesheet">
+  </head>
+  <body>
+     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+ 
+  <a class="navbar-brand" href="#"><img src="flask-framework/static/logo_tafigraph.png" width="30" height="30" class="d-inline-block align-top" alt="">Taxigraph</a>
+        
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com/explorer">Explore tax data</a>
+      </li>
+        <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Side-by-side comparisons</a>
+        <div class="dropdown-menu" aria-labelledby="dropdown01">
+          <a class="dropdown-item" href="https://taxigraph.herokuapp.com/exploresics">Explore data by SIC codes</a>
+          <a class="dropdown-item" href="https://taxigraph.herokuapp.com/exploresize">Explore data by company size</a>
+        </div>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com/reconciliation">Tax rate reconciliation</a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com/trends">Tax trends</a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com/factsheet">Company tax fact sheet</a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com/glossary">Glossary of terms</a>
+      </li>
+         <li class="nav-item">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com/tickers">Tickers</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="https://taxigraph.herokuapp.com/about" tabindex="-1" aria-disabled="true">About</a>
+      </li>
+
+    </ul>  
+  </div>
+</nav>
+
+
+<main role="main" class="container">
+
+  <div class="starter-template">
+      <h1><br><br></h1>
+    <h1>About</h1>
+    <p class="lead">
+      Taxigraph® was developed by Goran Lazarevski in Python and HTML as a final capstone project within the framework of The Data Incubator Fellowship.
+      
+      
+      </p>
+      <h2>Business Use Case</h2>
+      The goal of this project was to develop a tool that tax professionals, policy-makers, journalists and the general public could use in order to explore and analyze tax data with the purpose of increasing the tax transparency and accountability of U.S. public firms. While these companies are obligated to make their financials publically available by law, data is disclosed separately by each company and for each year. Taxigraph retrieves and organizes tax data from the filed financial statements of all publically traded companies that are listed on U.S. stock exchanges, so that interested parties can easily access and analyze it across a wide and highly customizible set of metrics.<br>
+      <h2>Data</h2>
+
+      All financial data is publically available and was gathered from EDGAR on the <a href=https://www.sec.gov>website</a> of the Sercurities and Exchange Commission utilizing the newly developed XBRL standard.<br>
+      
+      EDGAR, the Electronic Data Gathering, Analysis, and Retrieval system, is the primary system for companies and others submitting documents under the Securities Act of 1933, the Securities Exchange Act of 1934, the Trust Indenture Act of 1939, and the Investment Company Act of 1940. The system processes about 3,000 filings per day, serves up 3,000 terabytes of data to the public annually, and accommodates 40,000 new filers per year on average. <br><br>
+      
+    XBRL or eXtensible Business Reporting Language is a software standard that was developed to improve the way in which financial data is communicated, making it easier to compile and share this data. Notably, eXtensible Business Reporting Language is an implementation of XML (extensible markup language), which is a specification that is used for organizing and defining data online. XBRL uses tags to identify each piece of financial data, which then allows it to be used programmatically by an XBRL-compatible program. XBRL is used around the world, in more than 50 countries. Millions of XBRL documents are created every year, replacing older, paper-based reports with more useful, more effective and more accurate digital versions. <br><br>
+
+On June 28, 2018, the Securities and Exchange Commission adopted amendments requiring the use, on a phased in basis, of Inline XBRL for operating company financial statement information and fund risk/return summary information. <br><br>
+    
+  </div>
+    
+    
+    
+</main><!-- /.container -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+      
+    </body>
+</html>
+
+

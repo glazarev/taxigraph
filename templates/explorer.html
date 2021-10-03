@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+  <head>
+      <!-- FOR EMBEDDING JSON PLOTS -->
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega@4"></script>
+ <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega-lite@3.2.1"></script>
+ <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega-embed@3"></script> 
+      
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v4.1.1">
+    <title>Taxigraph</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Bootstrap core CSS -->
+<link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="starter-template.css" rel="stylesheet">
+  </head>
+  <body>
+     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+ 
+  <a class="navbar-brand" href="#"><img src="flask-framework/static/logo_tafigraph.png" width="30" height="30" class="d-inline-block align-top" alt="">Taxigraph</a>
+        
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com/explorer">Explore tax data</a>
+      </li>
+        <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Side-by-side comparisons</a>
+        <div class="dropdown-menu" aria-labelledby="dropdown01">
+          <a class="dropdown-item" href="https://taxigraph.herokuapp.com/exploresics">Explore data by SIC codes</a>
+          <a class="dropdown-item" href="https://taxigraph.herokuapp.com/exploresize">Explore data by company size</a>
+        </div>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com/reconciliation">Tax rate reconciliation</a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com/trends">Tax trends</a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com/factsheet">Company tax fact sheet</a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com/glossary">Glossary of terms</a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com/tickers">Tickers</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="https://taxigraph.herokuapp.com/about" tabindex="-1" aria-disabled="true">About</a>
+      </li>
+
+    </ul>
+    
+  </div>
+</nav>
+      
+<main role="main" class="container">
+
+    
+    
+  <div class="starter-template">
+    <h1>Explore tax data</h1>
+      
+    <p class="lead"><br>This interactive tool allows you to examine and graph the relationships between any tax-related variables of interest from the financial statements of publically traded companies. In addition to choosing what variables to graph, you can select the SIC industry codes of interest, as well as the fiscal years over which the data will be aggregated. <br>
+On the scatter plot, you can zoom in and hover over any company to get more details. You can also make a selection with the cursor and the histogram will update with results pertaining to the selected companies. Conversely, clicking on any bin from the histogram will highlight only the companies that fall in the selected bin range. The histogram dropdown menus allow you to create a custom ratio of any two variables and graph its distribution in the population of US public companies. <br> You can also enter the stock market ticker for any publically traded company and it will be marked on the scatter plot with a red circle, as long as company data is available for the selected variables and fiscal years.</p>
+  </div>
+    <p><i> Note: This tool can display up to 5,000 companies. If the graph isn't being generated, try limiting the SIC codes included or select a different variable to reduce the number of companies.</i></p> 
+
+    <div id='vis'></div>
+  
+    
+    <h3> Graph customization: </h3>
+
+    
+<form action='https://taxigraph.herokuapp.com/explorer' method='GET'>
+
+    <label for="s1">Scatter Plot X-axis:</label><br>    
+      <select name="s1" method="GET" action="/">
+  <option value="{{s1list[0]}}" selected>{{s1list[0]}}</option>
+  {% for s1 in s1list[1:] %}
+    <option value="{{s1}}">{{s1}}</option>
+  {% endfor %}
+</select><br>
+    <p></p>
+    <label for="s2">Scatter Plot Y-axis:</label><br>    
+      <select name="s2" method="GET" action="/">
+  <option value="{{s2list[0]}}" selected>{{s2list[0]}}</option>
+  {% for s2 in s2list[1:] %}
+    <option value="{{s2}}">{{s2}}</option>
+  {% endfor %}
+</select><br>
+    <p></p>
+    <label for="h1">Histogram (numerator):</label><br>    
+      <select name="h1" method="GET" action="/">
+  <option value="{{h1list[0]}}" selected>{{h1list[0]}}</option>
+  {% for h1 in h1list[1:] %}
+    <option value="{{h1}}">{{h1}}</option>
+  {% endfor %}
+</select><br>
+    <p></p>
+    <label for="h2">Histogram (denominator):</label><br>    
+      <select name="h2" method="GET" action="/">
+  <option value="{{h2list[0]}}" selected>{{h2list[0]}}</option>
+  {% for h2 in h2list[1:] %}
+    <option value="{{h2}}">{{h2}}</option>
+  {% endfor %}
+</select><br>
+    <p></p>
+    
+    
+    <label for="year"><b>Fiscal years:</b></label><br>
+      <div class="checkbox">
+<label>
+    <input type="checkbox" name="year" value="2020"> 2020   
+</label>
+        <label>
+    <input type="checkbox" name="year" value="2019"> 2019
+</label>
+<label>
+    <input type="checkbox" name="year" value="2018"> 2018
+</label>
+        <label>
+    <input type="checkbox" name="year" value="2017"> 2017
+</label>
+<label>
+    <input type="checkbox" name="year" value="2016"> 2016
+</label>
+        <label>
+    <input type="checkbox" name="year" value="2015"> 2015
+</label>
+<label>
+    <input type="checkbox" name="year" value="2014"> 2014
+</label>
+        <label>
+    <input type="checkbox" name="year" value="2013"> 2013
+</label>
+<label>
+    <input type="checkbox" name="year" value="2012"> 2012
+</label>
+        <label>
+    <input type="checkbox" name="year" value="2011"> 2011
+</label>    
+        <label>
+    <input type="checkbox" name="year" value="2010"> 2010
+</label>    
+    </div>
+    <p></p>
+    <label for="sic"><b>SIC codes:</b></label><br>
+      <div class="checkbox">
+<label>
+    <input type="checkbox" name="sic" value="**"> All SIC codes   
+</label><br>
+        <label>
+    <input type="checkbox" name="sic" value="0*"> Agriculture, Forestry and Fishing
+</label><br>
+<label>
+    <input type="checkbox" name="sic" value="1*"> Mining and Contruction
+</label><br>
+        <label>
+    <input type="checkbox" name="sic" value="2*"> Manufacturing (Food and Kindred Products, Tobacco, Textiles, Apparel, Logging, Furniture, Paper Products, Printing and Publishing, Chemicals, Petroleum)
+</label><br>
+<label>
+    <input type="checkbox" name="sic" value="3*"> Manufacturing (Rubber, Plastics, Leather, Stone, Clay, Glass, Concrete, Metals, Machinery, Electronics, Transportation Equipment, Analytical and medical instruments and equipment, Watches)
+</label><br>
+        <label>
+    <input type="checkbox" name="sic" value="4*"> Transportation, Communications, Electric, Gas, and Sanitary Services
+</label><br>
+<label>
+    <input type="checkbox" name="sic" value="5*"> Wholesale and Retail Trade
+</label><br>
+        <label>
+    <input type="checkbox" name="sic" value="6*"> Finance, Insurance, And Real Estate
+</label><br>
+<label>
+    <input type="checkbox" name="sic" value="7*"> Services (Hotels and Lodging, Personal services, Business services, Automotive, Misc Repair services, Motion Pictures, Amusement and Recreation)
+</label><br>
+        <label>
+    <input type="checkbox" name="sic" value="8*"> Services (Health, Legal, Educational, Social, Museums, Galleries, Zoos, Membership Organizations, Engineering, Accounting, Research, Management Services )
+</label><br>    
+        <label>
+    <input type="checkbox" name="sic" value="9*"> Public Administration
+</label><br>    
+    </div>
+    <p></p>
+  
+    <label for="ticker"><b>Company ticker:</b></label><br>
+  <input type="text" id="ticker" name="ticker"><br>
+    <p></p>
+    <div class="row">
+      <input type="submit" value="Submit">
+    </div>
+    <p></p>
+</form>
+
+    
+</main><!-- /.container -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+   
+    <script>
+      var spec = "{{chart | safe}}";
+      vegaEmbed("#vis", spec);
+     </script>
+      
+  </body>
+</html>
+

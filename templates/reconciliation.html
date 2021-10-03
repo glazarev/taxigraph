@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+  <head>
+            <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega@4"></script>
+ <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega-lite@3.2.1"></script>
+ <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega-embed@3"></script> 
+      
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v4.1.1">
+    <title>Taxigraph</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Bootstrap core CSS -->
+<link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="starter-template.css" rel="stylesheet">
+  </head>
+  <body>
+ <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+ 
+  <a class="navbar-brand" href="#"><img src="flask-framework/static/logo_tafigraph.png" width="30" height="30" class="d-inline-block align-top" alt="">Taxigraph</a>
+        
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com/explorer">Explore tax data</a>
+      </li>
+        <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Side-by-side comparisons</a>
+        <div class="dropdown-menu" aria-labelledby="dropdown01">
+          <a class="dropdown-item" href="https://taxigraph.herokuapp.com/exploresics">Explore data by SIC codes</a>
+          <a class="dropdown-item" href="https://taxigraph.herokuapp.com/exploresize">Explore data by company size</a>
+        </div>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com/reconciliation">Tax rate reconciliation</a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com/trends">Tax trends</a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com/factsheet">Company tax fact sheet</a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com/glossary">Glossary of terms</a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com/tickers">Tickers</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="https://taxigraph.herokuapp.com/about" tabindex="-1" aria-disabled="true">About</a>
+      </li>
+    </ul>   
+  </div>
+</nav>
+      
+<main role="main" class="container">
+
+  <div class="starter-template">
+    <h1>Tax rate reconciliation</h1>
+    <p class="lead"><br>With this tool you can examine what are the most common and most important reasons why companies effective tax rates differ from the statutory tax rate (21%).<br> You can limit the query to a particular set of SIC industry codes or fiscal years. If you want to exclude from the ranking reconciliation items which are not very common, you can set a minimum frequency cutoff, defined here as the minimium share of annual reports from the user-specified query that must mention a given reconciliation item in order for it to be ranked. You can also hover over any box to read details about the distribution. </p>
+  </div>
+
+    <div id='vis'></div>
+    <p>Fiscal years included: {{yearlist}} </p>
+    <p>SIC codes included: {{sics}} </p>
+    
+    <h3> Customize box plot:</h3>
+    <form action='https://taxigraph.herokuapp.com/reconciliation' method='GET'>
+    
+    
+    <label for="year"><b>Fiscal years:</b></label><br>
+      <div class="checkbox">
+<label>
+    <input type="checkbox" name="year" value="2020"> 2020   
+</label>
+        <label>
+    <input type="checkbox" name="year" value="2019"> 2019
+</label>
+<label>
+    <input type="checkbox" name="year" value="2018"> 2018
+</label>
+        <label>
+    <input type="checkbox" name="year" value="2017"> 2017
+</label>
+<label>
+    <input type="checkbox" name="year" value="2016"> 2016
+</label>
+        <label>
+    <input type="checkbox" name="year" value="2015"> 2015
+</label>
+<label>
+    <input type="checkbox" name="year" value="2014"> 2014
+</label>
+        <label>
+    <input type="checkbox" name="year" value="2013"> 2013
+</label>
+<label>
+    <input type="checkbox" name="year" value="2012"> 2012
+</label>
+        <label>
+    <input type="checkbox" name="year" value="2011"> 2011
+</label>    
+        <label>
+    <input type="checkbox" name="year" value="2010"> 2010
+</label>    
+    </div>
+    <p></p>
+    <label for="sic"><b>SIC codes:</b></label><br>
+      <div class="checkbox">
+<label>
+    <input type="checkbox" name="sic" value="**"> All SIC codes   
+</label><br>
+        <label>
+    <input type="checkbox" name="sic" value="0*"> Agriculture, Forestry and Fishing
+</label><br>
+<label>
+    <input type="checkbox" name="sic" value="1*"> Mining and Contruction
+</label><br>
+        <label>
+    <input type="checkbox" name="sic" value="2*"> Manufacturing (Food and Kindred Products, Tobacco, Textiles, Apparel, Logging, Furniture, Paper Products, Printing and Publishing, Chemicals, Petroleum)
+</label><br>
+<label>
+    <input type="checkbox" name="sic" value="3*"> Manufacturing (Rubber, Plastics, Leather, Stone, Clay, Glass, Concrete, Metals, Machinery, Electronics, Transportation Equipment, Analytical and medical instruments and equipment, Watches)
+</label><br>
+        <label>
+    <input type="checkbox" name="sic" value="4*"> Transportation, Communications, Electric, Gas, and Sanitary Services
+</label><br>
+<label>
+    <input type="checkbox" name="sic" value="5*"> Wholesale and Retail Trade
+</label><br>
+        <label>
+    <input type="checkbox" name="sic" value="6*"> Finance, Insurance, And Real Estate
+</label><br>
+<label>
+    <input type="checkbox" name="sic" value="7*"> Services (Hotels and Lodging, Personal services, Business services, Automotive, Misc Repair services, Motion Pictures, Amusement and Recreation)
+</label><br>
+        <label>
+    <input type="checkbox" name="sic" value="8*"> Services (Health, Legal, Educational, Social, Museums, Galleries, Zoos, Membership Organizations, Engineering, Accounting, Research, Management Services )
+</label><br>    
+        <label>
+    <input type="checkbox" name="sic" value="9*"> Public Administration
+</label><br>    
+    </div>
+    <p></p>
+  
+    <label for="minfreq"><b>Minimum frequency:</b></label><br>
+  <input type="text" id="minfreq" name="minfreq"><br>
+    <p></p>
+    <div class="row">
+      <input type="submit" value="Submit">
+    </div>
+    <p></p>
+</form>
+    
+    
+</main><!-- /.container -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
+    <script>
+      var spec = {{chart | safe}};
+      vegaEmbed("#vis", spec);
+     </script>
+      
+  </body>
+</html>
+

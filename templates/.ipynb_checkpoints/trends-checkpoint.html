@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+  <head>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega@5"></script>
+ <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega-lite@4.8.1"></script>
+ <script type="text/javascript" src="https://cdn.jsdelivr.net/npm//vega-embed@5"></script> 
+      
+      
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v4.1.1">
+    <title>Taxigraph</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Bootstrap core CSS -->
+<link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="starter-template.css" rel="stylesheet">
+  </head>
+  <body>
+ <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+ 
+  <a class="navbar-brand" href="#"><img src="flask-framework/static/logo_tafigraph.png" width="30" height="30" class="d-inline-block align-top" alt="">Taxigraph</a>
+        
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com/explorer">Explore tax data</a>
+      </li>
+        <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Side-by-side comparisons</a>
+        <div class="dropdown-menu" aria-labelledby="dropdown01">
+          <a class="dropdown-item" href="https://taxigraph.herokuapp.com/exploresics">Explore data by SIC codes</a>
+          <a class="dropdown-item" href="https://taxigraph.herokuapp.com/exploresize">Explore data by company size</a>
+        </div>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com/reconciliation">Tax rate reconciliation</a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com/trends">Tax trends</a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com/factsheet">Company tax fact sheet</a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com/glossary">Glossary of terms</a>
+      </li>
+        <li class="nav-item">
+        <a class="nav-link" href="https://taxigraph.herokuapp.com/tickers">Tickers</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="https://taxigraph.herokuapp.com/about" tabindex="-1" aria-disabled="true">About</a>
+      </li>
+    </ul>   
+  </div>
+</nav>
+      
+<main role="main" class="container">
+
+  <div class="starter-template">
+    <h1>Tax rate reconciliation</h1>
+    <p class="lead"><br>With this tool you can examine how a tax-related variable or ratio of interest is trending over time for a selected public company.<br> Simply enter the ticker for your chosen company and select the variable you want to graph. The dropdown menus allow you to create a custom ratio of any two variables and analyze this ratio over time. You can limit the query to a particular range of fiscal years or include all available years.  </p>
+  </div>
+
+    <div id='vis'></div>
+
+    <h3> Customize box plot:</h3>
+    <form action='https://taxigraph.herokuapp.com/trends' method='GET'>
+    
+        
+    <label for="h1">Trendline (numerator):</label><br>    
+      <select name="h1" method="GET" action="/">
+  <option value="{{h1list[0]}}" selected>{{h1list[0]}}</option>
+  {% for h1 in h1list[1:] %}
+    <option value="{{h1}}">{{h1}}</option>
+  {% endfor %}
+</select><br>
+    <p></p>
+    <label for="h2">Trendline (denominator):</label><br>    
+      <select name="h2" method="GET" action="/">
+  <option value="{{h2list[0]}}" selected>{{h2list[0]}}</option>
+  {% for h2 in h2list[1:] %}
+    <option value="{{h2}}">{{h2}}</option>
+  {% endfor %}
+</select><br>
+    <p></p>
+        
+        
+    <label for="year"><b>Fiscal years:</b></label><br>
+      <div class="checkbox">
+<label>
+    <input type="checkbox" name="year" value="All Available"> All Available   
+</label>
+        <label>
+    <input type="checkbox" name="year" value="2020"> 2020   
+</label>
+        <label>
+    <input type="checkbox" name="year" value="2019"> 2019
+</label>
+<label>
+    <input type="checkbox" name="year" value="2018"> 2018
+</label>
+        <label>
+    <input type="checkbox" name="year" value="2017"> 2017
+</label>
+<label>
+    <input type="checkbox" name="year" value="2016"> 2016
+</label>
+        <label>
+    <input type="checkbox" name="year" value="2015"> 2015
+</label>
+<label>
+    <input type="checkbox" name="year" value="2014"> 2014
+</label>
+        <label>
+    <input type="checkbox" name="year" value="2013"> 2013
+</label>
+<label>
+    <input type="checkbox" name="year" value="2012"> 2012
+</label>
+        <label>
+    <input type="checkbox" name="year" value="2011"> 2011
+</label>    
+        <label>
+    <input type="checkbox" name="year" value="2010"> 2010
+</label>    
+    </div>
+    <p></p>
+  
+    <label for="ticker"><b>Minimum frequency:</b></label><br>
+  <input type="text" id="ticker" name="ticker"><br>
+    <p></p>
+    <div class="row">
+      <input type="submit" value="Submit">
+    </div>
+    <p></p>
+</form>
+    
+    
+</main><!-- /.container -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<style>
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+<img src="data:image/png;base64, {{ plot_url }}" style="width:80%;">
+     
+
+      
+  </body>
+</html>
